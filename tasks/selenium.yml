@@ -13,7 +13,11 @@
   tags: selenium_setup
 
 - name: selenium | Copy selenium into place
-  copy: src={{ selenium_dir_tmp }}/{{ selenium_jar_file }}  dest={{ selenium_server_path }}/{{ selenium_jar_file }} owner=root group=root mode=755
+  command: mv {{ selenium_dir_tmp }}/{{ selenium_jar_file }} {{ selenium_server_path }}/{{ selenium_jar_file }} creates="{{ selenium_server_path }}/{{ selenium_jar_file }}"
+  tags: selenium_setup
+
+- name: selenium | Ensure permissions
+  file: path="{{ selenium_server_path }}/{{ selenium_jar_file }}" state=file owner=root group=root mode=0755
   tags: selenium_setup
 
 - name: selenium | Install Configuration
