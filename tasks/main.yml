@@ -1,10 +1,14 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-- include: selenium.yml
+- include: selenium_check.yml
   when: selenium_enabled 
   tags: [selenium]
   
+- include: selenium_install.yml
+  when: selenium_needs_install is defined
+  tags: [selenium]
+
 - name: Copy Dockerfile
   template: src=Dockerfile.j2 dest={{ docker_files_generated_directory }}/Dockerfile mode=0777
   when: docker_files_enable

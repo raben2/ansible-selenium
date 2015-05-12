@@ -1,0 +1,10 @@
+---
+- name: selenium | Check if selenium is already installed
+  stat: path='{{ selenium_install_path }}'
+  register: selenium_install_status
+  tags: selenium_setup
+
+- name: selenium | Set install fact (if necessary)
+  set_fact: selenium_needs_install=True
+  when: ((selenium_install_status.stat.exists is defined) and
+         (not selenium_install_status.stat.exists))
