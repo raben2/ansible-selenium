@@ -1,0 +1,33 @@
+---
+- name: selenium | Create temporary directory for ChromeDriver
+  shell: mktemp -d
+  register: cdtempdir
+  tags: chromedriver_setup
+
+- name: selenium | Download ChromeDriver archive
+  get_url: url='{{selenium_chromedriver_full_url}}' dest='{{cdtempdir.stdout}}/{{selenium_chromedriver_archivename}}' force=no
+  tags: chromedriver_setup
+
+- name: selenium | Ensure necessary tools are present
+  apt: pkg={{ item }} state={{ selenium_pkg_state }} update_cache=yes
+  when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
+  tags: chromedriver_setup
+  with_items:
+   - unzip
+
+- name: selenium | Extract Chromedriver archive
+  command: unzip -x {{selenium_chromedriver_archivename}} chdir='{{cdtempdir.stdout}}' creates='{{cdtempdir.stdout}}/{{selenium_chromedriver_filename}}'
+  tags: chromedriver_setup
+
+- name: selenium | Ensure destination directory is present
+  file: path='{{selenium_chromedriver_path}}' mode='0755' state='directory'
+  tags: chromedriver_setup
+
+- name: selenium | Install Chromedriver
+  command: mv "{{cdtempdir.stdout}}/{{selenium_chromedriver_filename}}" "{{selenium_chromedriver_path}}/"
+  tags: chromedriver_setup
+
+- name: selenium | Clean up
+  file: path='{{cdtempdir.stdout}}' state='absent'
+  when: cdtempdir.changed
+  tags: chromedriver_setup
