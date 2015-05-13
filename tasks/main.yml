@@ -9,6 +9,10 @@
   when: selenium_needs_install is defined
   tags: [selenium]
 
+- include: selenium_chromedriver.yml
+  when: chromedriver_needs_install is defined
+  tags: [chromedriver]
+
 - name: Copy Dockerfile
   template: src=Dockerfile.j2 dest={{ docker_files_generated_directory }}/Dockerfile mode=0777
   when: docker_files_enable

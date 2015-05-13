@@ -1,3 +1,5 @@
 cur_dir: "{{lookup('pipe','pwd')}}"
 
 selenium_install_path: '{{ selenium_server_path }}/{{ selenium_jar_file }}'
+
+chromedriver_install_path: '{{selenium_chromedriver_path}}/{{selenium_chromedriver_filename}}'

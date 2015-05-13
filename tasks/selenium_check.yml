@@ -8,3 +8,20 @@
   set_fact: selenium_needs_install=True
   when: ((selenium_install_status.stat.exists is defined) and
          (not selenium_install_status.stat.exists))
+
+- name: selenium | Check if ChromeDriver is already installed
+  stat: path='{{chromedriver_install_path}}'
+  register: chromedriver_stat
+  tags: chromedriver_setup
+
+- name: selenium | Get ChromeDriver version
+  shell: '{{chromedriver_install_path}} --version | cut -d" " -f 2 | cut -d. -f1,2'
+  register: chromedriver_installed_version
+  when: chromedriver_stat.stat.exists
+  changed_when: False
+
+- name: selenium | Set install fact for ChromeDriver (if necessary)
+  set_fact: chromedriver_needs_install=True
+  when: ((not chromedriver_stat.stat.exists) or
+         ((chromedriver_installed_version.stdout is defined) and
+          (chromedriver_installed_version.stdout != selenium_chromedriver_version)))

@@ -6,10 +6,19 @@ selenium_server_major_version: "2.44"       # Selenium client major version
 selenium_server_minor_version: ".0"         # Selenium client minor version
 selenium_server_version: "{{ selenium_server_major_version }}{{ selenium_server_minor_version }}"           # Selenium client version
 
+selenium_chromedriver_enabled: yes                # Install Chromedriver
+selenium_chromedriver_version: '2.15'             # Chromedriver version
+selenium_chromedriver_path: '/usr/local/libexec'  # Chromedriver install path
+
 selenium_download_url: "http://selenium-release.storage.googleapis.com/{{ selenium_server_major_version }}/{{ selenium_jar_file }}"
 selenium_jar_file: "selenium-server-standalone-{{ selenium_server_version }}.jar"
 selenium_server_path: '/usr/local/lib'
 #todo used in jenkins /var/lib/selenium/selenium.jar
+
+selenium_chromedriver_url_path: 'http://chromedriver.storage.googleapis.com/{{selenium_chromedriver_version}}'
+selenium_chromedriver_archivename: 'chromedriver_linux64.zip'
+selenium_chromedriver_full_url: '{{selenium_chromedriver_url_path}}/{{selenium_chromedriver_archivename}}'
+selenium_chromedriver_filename: 'chromedriver'
 
 selenium_sel_role: standalone
 
